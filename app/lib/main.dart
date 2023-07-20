@@ -50,19 +50,19 @@ class _LoginPageState extends State<LoginPage> {
               ), textAlign: TextAlign.center),
               Padding(padding: const EdgeInsets.only(top: 24.00), child: Row(mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(onPressed: () => {}, style: ElevatedButton.styleFrom(shape: const StadiumBorder(), primary: Colors.white),
+                    ElevatedButton(onPressed: () => {}, style: ElevatedButton.styleFrom(primary: Colors.white),
                         child: const Text('Student', style: TextStyle(
                             color: Colors.black,
                         ))
                     ),
                     const SizedBox(width: 10),
-                    ElevatedButton(onPressed: () => {}, style: ElevatedButton.styleFrom(shape: const StadiumBorder(), primary: Colors.white),
+                    ElevatedButton(onPressed: () => {}, style: ElevatedButton.styleFrom(primary: Colors.white),
                         child: const Text('Parent/Carer', style: TextStyle(
                           color: Colors.black,
                         ))
                     ),
                     const SizedBox(width: 10),
-                    ElevatedButton(onPressed: () => {}, style: ElevatedButton.styleFrom(shape: const StadiumBorder(), primary: Colors.white),
+                    ElevatedButton(onPressed: () => {}, style: ElevatedButton.styleFrom(primary: Colors.white),
                         child: const Text('Staff', style: TextStyle(
                           color: Colors.black,
                         ))

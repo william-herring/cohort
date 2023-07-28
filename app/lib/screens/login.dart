@@ -47,7 +47,10 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Padding(
               padding: const EdgeInsets.all(20.00),
               child: Container(
-                color: Colors.white,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0)
+                ),
                 height: 430,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -119,8 +122,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 16.00),
                           ElevatedButton(onPressed: handleSubmit,
-                            style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white)),
-                            child: const Text('Log in', style: TextStyle(color: Color.fromRGBO(123, 88, 198, 1), fontWeight: FontWeight.w700)),
+                            style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => const Color.fromRGBO(123, 88, 198, 1))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Text('Log in', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+                            ),
                           )
                         ],
                       ),

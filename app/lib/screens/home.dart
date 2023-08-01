@@ -8,9 +8,71 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: Drawer(
-        child: ListView(
-          children: [
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 26.0, horizontal: 8.0),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              ListTile(
+                onTap: () {},
+                leading: CircleAvatar(
+                  backgroundColor: Color.fromRGBO(224, 70, 70, 1),
+                  child: Text('WH', style: TextStyle(color: Colors.white)),
+                  radius: 20.00,
+                ),
+                title: Text('William Herring', style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold
+                )),
+                trailing: IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () {},
+                ),
+              ),
+              SizedBox(height: 16.0),
+              ListTile(
+                onTap: () {},
+                leading: Icon(Icons.home_filled, color: Colors.black54),
+                title: Text('Home', style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 20.0
+                )),
+              ),
+              ListTile(
+                onTap: () {},
+                leading: Icon(Icons.calendar_month, color: Colors.black54),
+                title: Text('Schedule', style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 20.0
+                )),
+              ),
+              ListTile(
+                onTap: () {},
+                leading: Icon(Icons.list, color: Colors.black54),
+                title: Text('Classes', style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 20.0
+                )),
+              ),
+              ListTile(
+                onTap: () {},
+                leading: Icon(Icons.newspaper, color: Colors.black54),
+                title: Text('News', style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 20.0
+                )),
+              ),
+              ListTile(
+                onTap: () {},
+                leading: Icon(Icons.event, color: Colors.black54),
+                title: Text('Events', style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 20.0
+                )),
+              ),
+            ],
+          ),
         ),
       ),
       appBar: AppBar(
@@ -34,8 +96,9 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Card(
-                child: Container(
+              InkWell(
+                onTap: () {},
+                child: Ink(
                     padding: EdgeInsets.all(26.0),
                     width: MediaQuery.of(context).size.width,
                     height: 120,
@@ -47,11 +110,20 @@ class HomeScreen extends StatelessWidget {
                           Color.fromRGBO(123, 88, 198, 0.9)
                         ],
                         begin: Alignment.topLeft,
-                        end: Alignment.bottomRight
-                      )
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.7),
+                          blurRadius: 4,
+                          spreadRadius: 2,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
@@ -82,7 +154,12 @@ class HomeScreen extends StatelessWidget {
                               ),
                             )
                           ],
-                        )
+                        ),
+                        Text('S10', style: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0,
+                        ))
                       ],
                     )
                 ),

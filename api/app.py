@@ -44,7 +44,7 @@ def create_user():
     return jsonify({ 'token': token, 'user_id': user.user_id }), 201
 
 @app.route('/api/get-user')
-@jwt_required
+@jwt_required()
 def get_user():
     user = User.query.get(get_jwt_identity())
     return jsonify(user.__dict__) # lazy, change later to only include relevant data

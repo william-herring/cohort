@@ -1,5 +1,5 @@
 import random
-from flask import Flask, request, abort, jsonify, url_for
+from flask import Flask, request, abort, jsonify
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -14,18 +14,22 @@ jwt = JWTManager(app)
 
 from models import User
 
+with app.app_context():
+    db.create_all()
+
 @app.route('/api/create-user', methods=['POST'])
 def create_user():
-    name = request.json.get('username')
+    name = request.json.get('name')
     email = request.json.get('email')
     password = request.json.get('password')
 
-    if name is None or password or email is None:
+    if name is None or password is None or email is None:
+        print(name, email, password)
         abort(400)
     if User.query.filter_by(email=email).first() is not None:
         abort(400)
 
-    surname = name.split()[1] if ' ' in name else name
+    surname = name.upper().split()[1] if ' ' in name else name.upper()
     user_id = (surname[:4] if len(surname) > 4 else surname) + str(random.randint(10, 99))
     while User.query.filter_by(user_id=user_id).first() is not None:
         user_id = (surname[:4] if len(surname) > 4 else surname) + str(random.randint(10, 99))
@@ -37,7 +41,7 @@ def create_user():
 
     token = create_access_token(identity=user.id)
 
-    return jsonify({ 'token': token }), 201
+    return jsonify({ 'token': token, 'user_id': user.user_id }), 201
 
 @app.route('/api/get-user')
 @jwt_required

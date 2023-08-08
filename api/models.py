@@ -10,6 +10,7 @@ class User(db.Model):
     user_id = db.Column(db.String(10), unique=True)
     role = db.Column(db.String(20), default='Student')
     avatar = db.Column(db.String(300))
+    school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -23,3 +24,4 @@ class User(db.Model):
 class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    users = db.relationship('User', backref='school')

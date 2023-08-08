@@ -24,7 +24,6 @@ def create_user():
     password = request.json.get('password')
 
     if name is None or password is None or email is None:
-        print(name, email, password)
         abort(400)
     if User.query.filter_by(email=email).first() is not None:
         abort(400)
@@ -43,8 +42,22 @@ def create_user():
 
     return jsonify({ 'token': token, 'user_id': user.user_id }), 201
 
-@app.route('/api/get-user')
+@app.route('/api/token', methods=['GET'])
+def get_token():
+    user_id = request.json.get('user_id')
+    password = request.json.get('password')
+
+    user = User.query.filter_by(user_id=user_id).first()
+    if user is None:
+        abort(400)
+
+    if user.verify_password(password):
+        return jsonify({ 'token': create_access_token(identity=user.id) }), 200
+
+    abort(400)
+
+@app.route('/api/get-user', methods=['GET'])
 @jwt_required()
 def get_user():
     user = User.query.get(get_jwt_identity())
-    return jsonify(user.__dict__) # lazy, change later to only include relevant data
+    return jsonify({ 'user': user.__dict__ }) # lazy, change later to only include relevant data

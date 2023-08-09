@@ -42,7 +42,7 @@ def create_user():
 
     return jsonify({ 'token': token, 'user_id': user.user_id }), 201
 
-@app.route('/api/token', methods=['GET'])
+@app.route('/api/token', methods=['POST'])
 def get_token():
     user_id = request.json.get('user_id')
     password = request.json.get('password')

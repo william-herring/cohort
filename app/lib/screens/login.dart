@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:app/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -12,9 +16,16 @@ class _LoginScreenState extends State<LoginScreen> {
   String password = '';
   final _formKey = GlobalKey<FormState>();
 
-  void handleSubmit() {
+  handleSubmit() async {
     _formKey.currentState?.validate();
-    print("$userID, $password");
+    Response response = await post(Uri.parse('${apiBaseUrl}token'), headers: {'Content-Type': 'application/json'}, body: jsonEncode({
+      'user_id': userID,
+      'password': password,
+    }));
+
+    print(response.body);
+    print(jsonDecode(response.body)['token']);
+    
     Navigator.pushReplacementNamed(context, '/home');
   }
 
@@ -26,11 +37,11 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         leadingWidth: 130,
-        leading: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: const Image(image: AssetImage('assets/images/logo.png')),
+        leading: const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Image(image: AssetImage('assets/images/logo.png')),
         ),
-        title: Text('Log in', style: TextStyle(
+        title: const Text('Log in', style: TextStyle(
           fontWeight: FontWeight.bold
         )),
         actions: [
@@ -55,10 +66,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Proceed to Cohort', style: TextStyle(
+                    const Text('Proceed to Cohort', style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25.00,
-                      color: const Color.fromRGBO(123, 88, 198, 1)
+                      color: Color.fromRGBO(123, 88, 198, 1)
                     )),
                     const SizedBox(height: 16.00),
                     Form(
@@ -71,16 +82,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 300.00,
                             margin: EdgeInsets.only(bottom: 6.00),
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'User ID',
                                 enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: const Color.fromRGBO(123, 88, 198, 1))
+                                    borderSide: BorderSide(color: Color.fromRGBO(123, 88, 198, 1))
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: const Color.fromRGBO(123, 88, 198, 1))
+                                    borderSide: BorderSide(color: Color.fromRGBO(123, 88, 198, 1))
                                 ),
                                 labelStyle: TextStyle(
-                                  color: const Color.fromRGBO(123, 88, 198, 1),
+                                  color: Color.fromRGBO(123, 88, 198, 1),
                                 ),
                               ),
                               validator: (String? value) {
@@ -95,19 +106,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           Container(
                             width: 300.00,
-                            margin: EdgeInsets.only(top: 6.00),
+                            margin: const EdgeInsets.only(top: 6.00),
                             child: TextFormField(
                               obscureText: true,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Password',
                                 enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: const Color.fromRGBO(123, 88, 198, 1))
+                                    borderSide: BorderSide(color: Color.fromRGBO(123, 88, 198, 1))
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: const Color.fromRGBO(123, 88, 198, 1))
+                                    borderSide: BorderSide(color: Color.fromRGBO(123, 88, 198, 1))
                                 ),
                                 labelStyle: TextStyle(
-                                  color: const Color.fromRGBO(123, 88, 198, 1),
+                                  color: Color.fromRGBO(123, 88, 198, 1),
                                 ),
                               ),
                               validator: (String? value) {
@@ -123,9 +134,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 16.00),
                           ElevatedButton(onPressed: handleSubmit,
                             style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => const Color.fromRGBO(123, 88, 198, 1))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Text('Log in', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Log in', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
                             ),
                           )
                         ],

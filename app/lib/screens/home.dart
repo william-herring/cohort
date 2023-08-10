@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               ListTile(
-                onTap: () {},
+                onTap: () => Navigator.pop(context),
                 leading: Icon(Icons.home_filled, color: Colors.black54),
                 title: Text('Home', style: TextStyle(
                     color: Colors.black54,
@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                 )),
               ),
               ListTile(
-                onTap: () {},
+                onTap: () => Navigator.pushReplacementNamed(context, '/schedule'),
                 leading: Icon(Icons.calendar_month, color: Colors.black54),
                 title: Text('Schedule', style: TextStyle(
                     color: Colors.black54,

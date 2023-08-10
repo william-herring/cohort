@@ -1,4 +1,5 @@
 import 'package:app/screens/home.dart';
+import 'package:app/screens/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app/screens/login.dart';
@@ -28,7 +29,8 @@ class App extends StatelessWidget {
       ),
       home: const LoginScreen(),
       routes: {
-        '/home': (context) => const HomeScreen()
+        '/home': (context) => const HomeScreen(),
+        '/schedule': (context) => const ScheduleScreen(),
       },
     );
   }

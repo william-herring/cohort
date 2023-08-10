@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,12 +16,16 @@ class HomeScreen extends StatelessWidget {
             children: [
               ListTile(
                 onTap: () {},
-                leading: const CircleAvatar(
+                leading: user.avatar != null? CircleAvatar(
+                  radius: 20.00,
+                  backgroundImage: NetworkImage(user.avatar.toString()),
+                ) :
+                const CircleAvatar(
                   backgroundColor: Color.fromRGBO(224, 70, 70, 1),
                   radius: 20.00,
                   child: Text('WH', style: TextStyle(color: Colors.white)),
                 ),
-                title: const Text('William Herring', style: TextStyle(
+                title: Text(user.name.toString(), style: const TextStyle(
                     color: Colors.black54,
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold
@@ -82,7 +87,11 @@ class HomeScreen extends StatelessWidget {
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 15.0),
-            child: const CircleAvatar(
+            child: user.avatar != null? CircleAvatar(
+              radius: 20.00,
+              backgroundImage: NetworkImage(user.avatar.toString()),
+            ) :
+            const CircleAvatar(
               backgroundColor: Color.fromRGBO(224, 70, 70, 1),
               radius: 20.00,
               child: Text('WH', style: TextStyle(color: Colors.white)),

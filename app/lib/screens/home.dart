@@ -15,58 +15,58 @@ class HomeScreen extends StatelessWidget {
             children: [
               ListTile(
                 onTap: () {},
-                leading: CircleAvatar(
+                leading: const CircleAvatar(
                   backgroundColor: Color.fromRGBO(224, 70, 70, 1),
-                  child: Text('WH', style: TextStyle(color: Colors.white)),
                   radius: 20.00,
+                  child: Text('WH', style: TextStyle(color: Colors.white)),
                 ),
-                title: Text('William Herring', style: TextStyle(
+                title: const Text('William Herring', style: TextStyle(
                     color: Colors.black54,
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold
                 )),
                 trailing: IconButton(
-                  icon: Icon(Icons.more_vert),
+                  icon: const Icon(Icons.more_vert),
                   onPressed: () {},
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ListTile(
                 onTap: () => Navigator.pop(context),
-                leading: Icon(Icons.home_filled, color: Colors.black54),
-                title: Text('Home', style: TextStyle(
+                leading: const Icon(Icons.home_filled, color: Colors.black54),
+                title: const Text('Home', style: TextStyle(
                     color: Colors.black54,
                     fontSize: 20.0
                 )),
               ),
               ListTile(
                 onTap: () => Navigator.pushReplacementNamed(context, '/schedule'),
-                leading: Icon(Icons.calendar_month, color: Colors.black54),
-                title: Text('Schedule', style: TextStyle(
+                leading: const Icon(Icons.calendar_month, color: Colors.black54),
+                title: const Text('Schedule', style: TextStyle(
                     color: Colors.black54,
                     fontSize: 20.0
                 )),
               ),
               ListTile(
                 onTap: () {},
-                leading: Icon(Icons.list, color: Colors.black54),
-                title: Text('Classes', style: TextStyle(
+                leading: const Icon(Icons.list, color: Colors.black54),
+                title: const Text('Classes', style: TextStyle(
                     color: Colors.black54,
                     fontSize: 20.0
                 )),
               ),
               ListTile(
                 onTap: () {},
-                leading: Icon(Icons.newspaper, color: Colors.black54),
-                title: Text('News', style: TextStyle(
+                leading: const Icon(Icons.newspaper, color: Colors.black54),
+                title: const Text('News', style: TextStyle(
                     color: Colors.black54,
                     fontSize: 20.0
                 )),
               ),
               ListTile(
                 onTap: () {},
-                leading: Icon(Icons.event, color: Colors.black54),
-                title: Text('Events', style: TextStyle(
+                leading: const Icon(Icons.event, color: Colors.black54),
+                title: const Text('Events', style: TextStyle(
                     color: Colors.black54,
                     fontSize: 20.0
                 )),
@@ -76,16 +76,16 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       appBar: AppBar(
-        title: Text('Home', style: TextStyle(
+        title: const Text('Home', style: TextStyle(
           fontWeight: FontWeight.bold
         )),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 15.0),
-            child: CircleAvatar(
+            child: const CircleAvatar(
               backgroundColor: Color.fromRGBO(224, 70, 70, 1),
-              child: Text('WH', style: TextStyle(color: Colors.white)),
               radius: 20.00,
+              child: Text('WH', style: TextStyle(color: Colors.white)),
             ),
           )
         ],
@@ -99,12 +99,12 @@ class HomeScreen extends StatelessWidget {
               InkWell(
                 onTap: () {},
                 child: Ink(
-                    padding: EdgeInsets.all(26.0),
+                    padding: const EdgeInsets.all(26.0),
                     width: MediaQuery.of(context).size.width,
                     height: 120,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(14.0)),
-                      gradient: LinearGradient(
+                      borderRadius: const BorderRadius.all(Radius.circular(14.0)),
+                      gradient: const LinearGradient(
                         colors: [
                           Color.fromRGBO(101, 65, 178, 1.0),
                           Color.fromRGBO(123, 88, 198, 0.9)
@@ -117,7 +117,7 @@ class HomeScreen extends StatelessWidget {
                           color: Colors.grey.withOpacity(0.7),
                           blurRadius: 4,
                           spreadRadius: 2,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -127,32 +127,32 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Text('Applied Computing', style: TextStyle(
+                            const Text('Applied Computing', style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0
                             )),
-                            SizedBox(width: 8.0),
+                            const SizedBox(width: 8.0),
                             Text('COMP11A', style: TextStyle(
                                 color: Colors.white.withOpacity(0.5),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.0
                             )),
-                            Spacer(),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
+                            const Spacer(),
+                            MediaQuery.of(context).size.width > 400? Container(
+                              padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(6.0)
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text('NOW', style: TextStyle(
-                                    color: const Color.fromRGBO(123, 88, 198, 1),
+                                    color: Color.fromRGBO(123, 88, 198, 1),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13.0
                                 )),
                               ),
-                            )
+                            ) : Container()
                           ],
                         ),
                         Text('S10', style: TextStyle(

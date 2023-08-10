@@ -1,8 +1,9 @@
 import 'dart:convert';
-
+import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:app/constants.dart';
+import '../models/user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -23,9 +24,11 @@ class _LoginScreenState extends State<LoginScreen> {
       'password': password,
     }));
 
-    print(response.body);
-    print(jsonDecode(response.body)['token']);
-    
+    await prefs.setString('token', jsonDecode(response.body)['token']);
+
+    Response userData = await get(Uri.parse('${apiBaseUrl}get-user'), headers: {'Authorization': "Bearer ${jsonDecode(response.body)['token']}"});
+    user = User.fromJson(jsonDecode(userData.body));
+
     Navigator.pushReplacementNamed(context, '/home');
   }
 

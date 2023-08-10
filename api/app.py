@@ -60,4 +60,4 @@ def get_token():
 @jwt_required()
 def get_user():
     user = User.query.get(get_jwt_identity())
-    return jsonify({ 'user': user.__dict__ }) # lazy, change later to only include relevant data
+    return jsonify({ 'user_id': user.user_id, 'name': user.name, 'email': user.email, 'avatar': user.avatar, 'role': user.role }), 200

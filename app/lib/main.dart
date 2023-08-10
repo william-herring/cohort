@@ -3,8 +3,15 @@ import 'package:app/screens/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app/screens/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'models/user.dart';
 
-void main() {
+late final SharedPreferences prefs;
+late final User user;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  prefs = await SharedPreferences.getInstance();
   runApp(const App());
 }
 
@@ -21,9 +28,9 @@ class App extends StatelessWidget {
         textTheme: GoogleFonts.interTextTheme(
           Theme.of(context).textTheme,
         ),
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
-          foregroundColor: const Color.fromRGBO(123, 88, 198, 1),
+          foregroundColor: Color.fromRGBO(123, 88, 198, 1),
           shadowColor: Colors.transparent,
         )
       ),

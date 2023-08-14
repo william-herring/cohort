@@ -1,3 +1,6 @@
+import random
+import string
+
 from app import db
 from passlib.apps import custom_app_context as pwd_context
 
@@ -24,4 +27,11 @@ class User(db.Model):
 class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    users = db.relationship('User', backref='school')
+    people = db.relationship('User', backref='school')
+    invite_code = db.Column(db.String(6), unique=True)
+
+    def generate_invite_code(self):
+        code = ''.join(random.choices(string.ascii_uppercase, k=6))
+        while School.query.filter(invite_code=code).first() is not None:
+            code = ''.join(random.choices(string.ascii_uppercase, k=6))
+        self.invite_code = code

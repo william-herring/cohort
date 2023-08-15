@@ -35,3 +35,7 @@ class School(db.Model):
         while School.query.filter(invite_code=code).first() is not None:
             code = ''.join(random.choices(string.ascii_uppercase, k=6))
         self.invite_code = code
+
+class Class(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    class_code = db.Column(db.String(10), nullable=False)

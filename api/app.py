@@ -66,6 +66,23 @@ def get_user():
     user = User.query.get(get_jwt_identity())
     return jsonify({ 'user_id': user.user_id, 'name': user.name, 'email': user.email, 'avatar': user.avatar, 'role': user.role }), 200
 
+@app.route('/api/join-school', methods=['POST'])
+@jwt_required()
+def join_school():
+    user = User.query.get(get_jwt_identity())
+    school_code = request.json.get('code')
+
+    school = School.query.filter(invite_code=school_code).first()
+    if school is None:
+        abort(404)
+
+    school.people.append(user)
+    db.session.add(school)
+    db.session.commit()
+
+    return jsonify({ 'id': school.id, 'name': school.name }), 201
+
+
 @app.route('/api/get-user', methods=['POST'])
 @jwt_required()
 def create_school():
@@ -85,19 +102,7 @@ def create_school():
 
     return jsonify({ 'invite_code': school.invite_code }), 201
 
-
-@app.route('/api/join-school', methods=['POST'])
+@app.route('/api/create-class', methods=['POST'])
 @jwt_required()
-def join_school():
-    user = User.query.get(get_jwt_identity())
-    school_code = request.json.get('code')
-
-    school = School.query.filter(invite_code=school_code).first()
-    if school is None:
-        abort(404)
-
-    school.people.append(user)
-    db.session.add(school)
-    db.session.commit()
-
-    return jsonify({ 'id': school.id, 'name': school.name }), 201
+def create_class():
+    pass

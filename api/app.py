@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
-from models import User, School
+from models import *
 
 with app.app_context():
     db.create_all()
@@ -99,10 +99,60 @@ def create_school():
     db.session.add(school)
     db.session.commit()
 
-
     return jsonify({ 'invite_code': school.invite_code }), 201
 
 @app.route('/api/create-class', methods=['POST'])
 @jwt_required()
 def create_class():
-    pass
+    user = User.query.get(get_jwt_identity())
+    if user.role != 'Educator':
+        abort(403)
+
+    title = request.json.get('title')
+    class_code = request.json.get('title')
+    people = [user]
+    class_obj = Class(
+        name=title,
+        class_code=class_code,
+        people=people
+    )
+    db.session.add(class_obj)
+    db.session.commit()
+
+    return jsonify({ 'class_code': class_obj.class_code }), 201
+
+@app.route('/api/create-post', methods=['POST'])
+@jwt_required()
+def create_post():
+    user = User.query.get(get_jwt_identity())
+    if user.role != 'Educator':
+        abort(403)
+
+    attachments = request.json.get('attachments')
+    if attachments is not None:
+        attachments = []
+        for i in attachments:
+            a = Attachment(
+                resource_url=i
+            )
+            db.session.add(Attachment)
+            db.session.commit()
+            attachments.append(a)
+
+    title = request.json.get('title')
+    body = request.json.get('body')
+    tag = request.json.get('tag')
+    is_lesson_plan = request.json.get('is_lesson_plan')
+    class_id = Class.query.filter(class_code=request.json.get('class')).first().id
+    class_obj = Post(
+        title=title,
+        body=body,
+        tag=tag,
+        class_id=class_id,
+        is_lesson_plan=is_lesson_plan,
+        attachments=attachments
+    )
+    db.session.add(class_obj)
+    db.session.commit()
+
+    return 201

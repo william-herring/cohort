@@ -14,6 +14,8 @@ class User(db.Model):
     role = db.Column(db.String(20), default='Student')
     avatar = db.Column(db.String(300))
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
+    classes = db.relationship('Class', backref='user')
+    replies = db.relationship('Reply', backref='user')
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -39,3 +41,27 @@ class School(db.Model):
 class Class(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     class_code = db.Column(db.String(10), nullable=False)
+    people = db.relationship('User', backref='class')
+    posts = db.relationship('Post', backref='class')
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    created_at = db.Column(db.DateTime, default=db.func.now())
+    title = db.Column(db.String(100), nullable=False)
+    body = db.Column(db.String(500))
+    tag = db.Column(db.String('20'), default='General')
+    is_lesson_plan = db.Column(db.Boolean, default=False)
+    replies = db.relationship('Reply', backref='post')
+    attachments = db.relationship('Attachment', backref='post')
+
+class Reply(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    author_id = db.Column(db.String, db.ForeignKey('user.user_id'))
+
+class Attachment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    reply_id = db.Column(db.Integer, db.ForeignKey('reply.id'))
+    resource_url = db.Column(db.String(250), nullable=False)

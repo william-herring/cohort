@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
     await prefs.setString('token', jsonDecode(response.body)['token']);
 
     Response userData = await get(Uri.parse('${apiBaseUrl}get-user'), headers: {'Authorization': "Bearer ${jsonDecode(response.body)['token']}"});
-    user = User.fromJson(jsonDecode(userData.body));
+    currentUser = User.fromJson(jsonDecode(userData.body));
 
     Navigator.pushReplacementNamed(context, '/home');
   }

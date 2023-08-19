@@ -1,4 +1,5 @@
 import 'package:app/screens/home.dart';
+import 'package:app/screens/profile.dart';
 import 'package:app/screens/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'models/user.dart';
 
 late final SharedPreferences prefs;
-late final User user;
+late User currentUser;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,8 +37,9 @@ class App extends StatelessWidget {
       ),
       home: const LoginScreen(),
       routes: {
-        '/home': (context) => const HomeScreen(),
-        '/schedule': (context) => const ScheduleScreen(),
+        '/home': (context) => HomeScreen(currentUser),
+        '/schedule': (context) => ScheduleScreen(currentUser),
+        '/profile': (context) => ProfileScreen(currentUser),
       },
     );
   }

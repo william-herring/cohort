@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
-import '../main.dart';
+import '../models/user.dart';
+import 'package:app/main.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  User user;
+  HomeScreen(this.user, {Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState(user);
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  User user;
+  _HomeScreenState(this.user);
 
   @override
   Widget build(BuildContext context) {
+    currentUser = user;
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: Drawer(
@@ -15,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             shrinkWrap: true,
             children: [
               ListTile(
-                onTap: () {},
+                onTap: () => Navigator.pushReplacementNamed(context, '/profile'),
                 leading: user.avatar != null? CircleAvatar(
                   radius: 20.00,
                   backgroundImage: NetworkImage(user.avatar.toString()),
@@ -85,16 +96,19 @@ class HomeScreen extends StatelessWidget {
           fontWeight: FontWeight.bold
         )),
         actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 15.0),
-            child: user.avatar != null? CircleAvatar(
-              radius: 20.00,
-              backgroundImage: NetworkImage(user.avatar.toString()),
-            ) :
-            const CircleAvatar(
-              backgroundColor: Color.fromRGBO(224, 70, 70, 1),
-              radius: 20.00,
-              child: Text('WH', style: TextStyle(color: Colors.white)),
+          GestureDetector(
+            onTap: () => Navigator.pushReplacementNamed(context, '/profile'),
+            child: Container(
+              margin: const EdgeInsets.only(right: 15.0),
+              child: user.avatar != null? CircleAvatar(
+                radius: 20.00,
+                backgroundImage: NetworkImage(user.avatar.toString()),
+              ) :
+              const CircleAvatar(
+                backgroundColor: Color.fromRGBO(224, 70, 70, 1),
+                radius: 20.00,
+                child: Text('WH', style: TextStyle(color: Colors.white)),
+              ),
             ),
           )
         ],

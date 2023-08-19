@@ -1,0 +1,3 @@
+Flask~=2.2.2
+Flask-Migrate~=4.0.4
+passlib~=1.7.4

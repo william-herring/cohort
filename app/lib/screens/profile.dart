@@ -1,29 +1,18 @@
 import 'package:flutter/material.dart';
-import '../main.dart';
 import '../models/user.dart';
+import 'package:app/main.dart';
 
-class ScheduleScreen extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
   User user;
-  ScheduleScreen(this.user, {Key? key}) : super(key: key);
+  ProfileScreen(this.user, {Key? key}) : super(key: key);
 
   @override
-  State<ScheduleScreen> createState() => _ScheduleScreenState(user);
+  State<ProfileScreen> createState() => _ProfileScreenState(user);
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   User user;
-  DateTime date = DateTime.now();
-
-  _ScheduleScreenState(this.user);
-
-  _selectDate() async {
-    final DateTime? picked = await showDatePicker(context: context, initialDate: date, firstDate: DateTime(2023), lastDate: DateTime(2024));
-    if (picked != null && picked != date) {
-      setState(() {
-        date = picked;
-      });
-    }
-  }
+  _ProfileScreenState(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +26,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               shrinkWrap: true,
               children: [
                 ListTile(
-                  onTap: () => Navigator.pushReplacementNamed(context, '/profile'),
+                  onTap: () => Navigator.pop(context),
                   leading: user.avatar != null? CircleAvatar(
                     radius: 20.00,
                     backgroundImage: NetworkImage(user.avatar.toString()),
@@ -67,7 +56,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   )),
                 ),
                 ListTile(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => Navigator.pushReplacementNamed(context, '/schedule'),
                   leading: const Icon(Icons.calendar_month, color: Colors.black54),
                   title: const Text('Schedule', style: TextStyle(
                       color: Colors.black54,
@@ -103,23 +92,20 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ),
         ),
         appBar: AppBar(
-          title: const Text('Schedule', style: TextStyle(
+          title: Text(user.userId, style: const TextStyle(
               fontWeight: FontWeight.bold
           )),
           actions: [
-            GestureDetector(
-              onTap: () => Navigator.pushReplacementNamed(context, '/profile'),
-              child: Container(
-                margin: const EdgeInsets.only(right: 15.0),
-                child: user.avatar != null? CircleAvatar(
-                  radius: 20.00,
-                  backgroundImage: NetworkImage(user.avatar.toString()),
-                ) :
-                const CircleAvatar(
-                  backgroundColor: Color.fromRGBO(224, 70, 70, 1),
-                  radius: 20.00,
-                  child: Text('WH', style: TextStyle(color: Colors.white)),
-                ),
+            Container(
+              margin: const EdgeInsets.only(right: 15.0),
+              child: user.avatar != null? CircleAvatar(
+                radius: 20.00,
+                backgroundImage: NetworkImage(user.avatar.toString()),
+              ) :
+              const CircleAvatar(
+                backgroundColor: Color.fromRGBO(224, 70, 70, 1),
+                radius: 20.00,
+                child: Text('WH', style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -130,17 +116,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(date.toString().substring(0, 10), style: const TextStyle(
-                      color: Colors.black54,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold
-                    )),
-                    IconButton(icon: const Icon(Icons.calendar_month), onPressed: _selectDate, color: Colors.black54)
-                  ],
-                ),
+                Text(user.name) // Replace with screen elements
               ],
             ),
           ),

@@ -6,6 +6,11 @@ from app import db
 from passlib.apps import custom_app_context as pwd_context
 
 
+classes = db.Table('classes',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('class_id', db.Integer, db.ForeignKey('class.id'), primary_key=True)
+)
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     password_hash = db.Column(db.String(128))
@@ -15,7 +20,7 @@ class User(db.Model):
     role = db.Column(db.String(20), default='Student')
     avatar = db.Column(db.String(300))
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
-    classes = db.relationship('Class', backref='user')
+    classes = db.relationship('Class', secondary=classes, lazy='subquery', backref=db.backref('users', lazy=True))
     replies = db.relationship('Reply', backref='user')
 
     def hash_password(self, password):
@@ -43,7 +48,6 @@ class Class(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     class_code = db.Column(db.String(10), nullable=False)
     name = db.Column(db.String(100), nullable=False)
-    people = db.relationship('User', backref='class')
     posts = db.relationship('Post', backref='class')
 
 class Post(db.Model):
@@ -59,12 +63,12 @@ class Post(db.Model):
 
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     attachments = db.relationship('Attachment', backref='reply')
 
 class Attachment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
-    reply_id = db.Column(db.Integer, db.ForeignKey('reply.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
+    reply_id = db.Column(db.Integer, db.ForeignKey('reply.id'), nullable=True)
     resource_url = db.Column(db.String(250), nullable=False)

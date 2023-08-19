@@ -84,7 +84,7 @@ def join_school():
     return jsonify({ 'id': school.id, 'name': school.name }), 201
 
 
-@app.route('/api/get-user', methods=['POST'])
+@app.route('/api/create-school', methods=['POST'])
 @jwt_required()
 def create_school():
     user = User.query.get(get_jwt_identity())

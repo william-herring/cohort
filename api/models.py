@@ -40,7 +40,7 @@ class School(db.Model):
 
     def generate_invite_code(self):
         code = ''.join(random.choices(string.ascii_uppercase, k=6))
-        while School.query.filter(invite_code=code).first() is not None:
+        while School.query.filter_by(invite_code=code).first() is not None:
             code = ''.join(random.choices(string.ascii_uppercase, k=6))
         self.invite_code = code
 

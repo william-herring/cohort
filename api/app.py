@@ -73,7 +73,7 @@ def join_school():
     user = User.query.get(get_jwt_identity())
     school_code = request.json.get('code')
 
-    school = School.query.filter(invite_code=school_code).first()
+    school = School.query.filter_by(invite_code=school_code).first()
     if school is None:
         abort(404)
 
@@ -81,7 +81,7 @@ def join_school():
     db.session.add(school)
     db.session.commit()
 
-    return jsonify({ 'id': school.id, 'name': school.name }), 201
+    return jsonify({ 'id': school.id, 'name': school.name }), 200
 
 
 @app.route('/api/create-school', methods=['POST'])

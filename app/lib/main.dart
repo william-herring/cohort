@@ -10,6 +10,13 @@ import 'models/user.dart';
 
 late final SharedPreferences prefs;
 late User currentUser;
+// User currentUser = User(
+//   'HERR80',
+//   'Student',
+//   'William Herring',
+//   'email@e.com',
+//   'https://avatars.worldcubeassociation.org/uploads/user/avatar/2019HERR14/1673589855.jpeg'
+// );
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

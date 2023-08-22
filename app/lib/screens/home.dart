@@ -1,3 +1,4 @@
+import 'package:app/widgets/modals/join_school.dart';
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import 'package:app/main.dart';
@@ -22,73 +23,90 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 26.0, horizontal: 8.0),
-          child: ListView(
-            shrinkWrap: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              ListTile(
-                onTap: () => Navigator.pushReplacementNamed(context, '/profile'),
-                leading: user.avatar != null? CircleAvatar(
-                  radius: 20.00,
-                  backgroundImage: NetworkImage(user.avatar.toString()),
-                ) :
-                const CircleAvatar(
-                  backgroundColor: Color.fromRGBO(224, 70, 70, 1),
-                  radius: 20.00,
-                  child: Text('WH', style: TextStyle(color: Colors.white)),
+              ListView(
+                shrinkWrap: true,
+                children: [
+                  ListTile(
+                    onTap: () => Navigator.pushReplacementNamed(context, '/profile'),
+                    leading: user.avatar != null? CircleAvatar(
+                      radius: 20.00,
+                      backgroundImage: NetworkImage(user.avatar.toString()),
+                    ) :
+                    const CircleAvatar(
+                      backgroundColor: Color.fromRGBO(224, 70, 70, 1),
+                      radius: 20.00,
+                      child: Text('WH', style: TextStyle(color: Colors.white)),
+                    ),
+                    title: Text(user.name.toString(), style: const TextStyle(
+                        color: Colors.black54,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold
+                    )),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.more_vert),
+                      onPressed: () {},
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  ListTile(
+                    onTap: () => Navigator.pop(context),
+                    leading: const Icon(Icons.home_filled, color: Colors.black54),
+                    title: const Text('Home', style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 20.0
+                    )),
+                  ),
+                  ListTile(
+                    onTap: () => Navigator.pushReplacementNamed(context, '/schedule'),
+                    leading: const Icon(Icons.calendar_month, color: Colors.black54),
+                    title: const Text('Schedule', style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 20.0
+                    )),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    leading: const Icon(Icons.list, color: Colors.black54),
+                    title: const Text('Classes', style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 20.0
+                    )),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    leading: const Icon(Icons.newspaper, color: Colors.black54),
+                    title: const Text('News', style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 20.0
+                    )),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    leading: const Icon(Icons.event, color: Colors.black54),
+                    title: const Text('Events', style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 20.0
+                    )),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ListTile(
+                    onTap: () => showDialog(context: context, builder: (BuildContext context) => const JoinSchoolPromptPopup()),
+                    title: const Text('Join a School', style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 20.0
+                    )),
+                  ),
                 ),
-                title: Text(user.name.toString(), style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold
-                )),
-                trailing: IconButton(
-                  icon: const Icon(Icons.more_vert),
-                  onPressed: () {},
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              ListTile(
-                onTap: () => Navigator.pop(context),
-                leading: const Icon(Icons.home_filled, color: Colors.black54),
-                title: const Text('Home', style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 20.0
-                )),
-              ),
-              ListTile(
-                onTap: () => Navigator.pushReplacementNamed(context, '/schedule'),
-                leading: const Icon(Icons.calendar_month, color: Colors.black54),
-                title: const Text('Schedule', style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 20.0
-                )),
-              ),
-              ListTile(
-                onTap: () {},
-                leading: const Icon(Icons.list, color: Colors.black54),
-                title: const Text('Classes', style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 20.0
-                )),
-              ),
-              ListTile(
-                onTap: () {},
-                leading: const Icon(Icons.newspaper, color: Colors.black54),
-                title: const Text('News', style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 20.0
-                )),
-              ),
-              ListTile(
-                onTap: () {},
-                leading: const Icon(Icons.event, color: Colors.black54),
-                title: const Text('Events', style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 20.0
-                )),
-              ),
+              )
             ],
-          ),
+          )
         ),
       ),
       appBar: AppBar(

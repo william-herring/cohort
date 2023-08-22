@@ -1,5 +1,6 @@
 import 'package:app/screens/home.dart';
 import 'package:app/screens/profile.dart';
+import 'package:app/screens/register.dart';
 import 'package:app/screens/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,6 +41,7 @@ class App extends StatelessWidget {
         '/home': (context) => HomeScreen(currentUser),
         '/schedule': (context) => ScheduleScreen(currentUser),
         '/profile': (context) => ProfileScreen(currentUser),
+        '/register': (context) => const RegisterScreen(),
       },
     );
   }

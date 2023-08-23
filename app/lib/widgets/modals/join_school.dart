@@ -50,6 +50,7 @@ class _JoinSchoolPromptPopupState extends State<JoinSchoolPromptPopup> {
                   setState(() => error = true);
                 } else {
                   setState(() => schoolName = jsonDecode(value.body)['name']);
+                  prefs.setString('school', schoolName);
                 }
               });
             },

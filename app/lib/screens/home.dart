@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:app/widgets/modals/join_school.dart';
 import 'package:flutter/material.dart';
 import '../models/user.dart';
@@ -68,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
                   ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () => Navigator.pushReplacementNamed(context, '/classes'),
                     leading: const Icon(Icons.list, color: Colors.black54),
                     title: const Text('Classes', style: TextStyle(
                         color: Colors.black54,
@@ -136,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.fromLTRB(22.0, 12.0, 22.0, 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: prefs.get('school').isNull? [const Text('No school data yet. Try joining a school.')] : [
               InkWell(
                 onTap: () {},
                 child: Ink(
@@ -204,7 +206,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     )
                 ),
-              )
+              ),
+              const SizedBox(height: 30),
+              Align(alignment: Alignment.centerLeft, child: Text("The latest from ${prefs.get('school').toString()}:", style: const TextStyle(
+                color: Color.fromRGBO(123, 88, 198, 1),
+                fontWeight: FontWeight.bold,
+                fontSize: 21.0
+              )))
             ],
           ),
         ),

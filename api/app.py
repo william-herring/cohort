@@ -122,6 +122,20 @@ def create_class():
 
     return jsonify({ 'class_code': class_obj.class_code }), 201
 
+@app.route('/api/get-classes', methods=['POST'])
+@jwt_required()
+def get_classes():
+    user = User.query.get(get_jwt_identity())
+    classes_list = []
+    for c in user.classes:
+        classes_list.append({
+            'id': c.id,
+            'class_code': c.class_code,
+            'name': c.name
+        })
+
+    return jsonify({ 'classes': classes_list }), 200
+
 @app.route('/api/create-post', methods=['POST'])
 @jwt_required()
 def create_post():

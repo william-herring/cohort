@@ -19,10 +19,14 @@ class _ClassesScreenState extends State<ClassesScreen> {
   User user;
   _ClassesScreenState(this.user);
 
-  Future<List<Widget>?> buildClassWidgets() async {
+  Future<Widget> buildClassWidgets() async {
+    if (prefs.getString('school').isUndefinedOrNull) {
+      return const Text('No school data yet. Try joining a school.');
+    }
+
     Response response = await post(Uri.parse('${apiBaseUrl}token'), headers: {'Content-Type': 'application/json', 'Authorization': "Bearer ${prefs.get('token')}"});
     if (response.statusCode != 200) {
-      return null;
+      return const Text('Failed to load class list.');
     }
 
     List<Widget> classes = [];
@@ -36,13 +40,14 @@ class _ClassesScreenState extends State<ClassesScreen> {
       ));
     }
 
-    return classes;
+    return ListView(children: classes);
   }
 
   @override
   Widget build(BuildContext context) {
     currentUser = user;
     return Scaffold(
+        floatingActionButton: user.role == 'Educator' && prefs.getString('school').isDefinedAndNotNull? FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)) : null,
         backgroundColor: Colors.white,
         drawer: Drawer(
           child: Padding(
@@ -158,15 +163,13 @@ class _ClassesScreenState extends State<ClassesScreen> {
         body: SizedBox.expand(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(22.0, 12.0, 22.0, 8.0),
-            child: ListView(
-              children: prefs.get('school').isNull? [Text('No school data yet. Try joining a school.')] : FutureBuilder(future: buildClassWidgets(),
-                  builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
-                    if (snapshot.hasData) {
-                      return snapshot.data
-                    }
-                    return []
-                  }),
-            ),
+            child: FutureBuilder(future: buildClassWidgets(),
+                builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  }
+                  return Container();
+                })
           ),
         )
     );

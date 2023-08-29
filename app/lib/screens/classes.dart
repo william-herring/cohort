@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:js_interop';
 import 'package:http/http.dart';
 import 'package:flutter/material.dart';
 import '../constants.dart';
@@ -20,7 +19,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
   _ClassesScreenState(this.user);
 
   Future<Widget> buildClassWidgets() async {
-    if (prefs.getString('school').isUndefinedOrNull) {
+    if (prefs.getString('school') == null) {
       return const Text('No school data yet. Try joining a school.');
     }
 
@@ -47,7 +46,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
   Widget build(BuildContext context) {
     currentUser = user;
     return Scaffold(
-        floatingActionButton: user.role == 'Educator' && prefs.getString('school').isDefinedAndNotNull? FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)) : null,
+        floatingActionButton: user.role == 'Educator' && prefs.getString('school') != null? FloatingActionButton(onPressed: () => Navigator.pushNamed(context, '/create-class'), child: const Icon(Icons.add)) : null,
         backgroundColor: Colors.white,
         drawer: Drawer(
           child: Padding(

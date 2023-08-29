@@ -111,7 +111,14 @@ def create_class():
 
     title = request.json.get('title')
     class_code = request.json.get('title')
+    students = request.json.get('students')
     people = [user]
+    for s in students:
+        try:
+            people.append(User.query.filter_by(user_id=s).first())
+        except:
+            return 404
+
     class_obj = Class(
         name=title,
         class_code=class_code,

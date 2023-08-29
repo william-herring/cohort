@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:app/widgets/modals/join_school.dart';
 import 'package:flutter/material.dart';
 import '../models/user.dart';
@@ -138,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.fromLTRB(22.0, 12.0, 22.0, 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: prefs.get('school').isNull? [const Text('No school data yet. Try joining a school.')] : [
+            children: prefs.get('school') == null? [const Text('No school data yet. Try joining a school.')] : [
               InkWell(
                 onTap: () {},
                 child: Ink(

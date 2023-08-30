@@ -6,12 +6,8 @@ from app import db
 from passlib.apps import custom_app_context as pwd_context
 
 
-classes = db.Table('classes',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('class_id', db.Integer, db.ForeignKey('class.id'), primary_key=True)
-)
-
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(100), nullable=False)
@@ -20,8 +16,8 @@ class User(db.Model):
     role = db.Column(db.String(20), default='Student')
     avatar = db.Column(db.String(300))
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
-    classes = db.relationship('Class', secondary=classes, lazy='subquery', backref=db.backref('users', lazy=True))
     replies = db.relationship('Reply', backref='user')
+    classes = db.relationship('Class', secondary='classes_people')
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -45,10 +41,20 @@ class School(db.Model):
         self.invite_code = code
 
 class Class(db.Model):
+    __tablename__ = 'class'
     id = db.Column(db.Integer, primary_key=True)
     class_code = db.Column(db.String(10), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     posts = db.relationship('Post', backref='class')
+    people = db.relationship('User', secondary='classes_people')
+
+class ClassesPeopleAssociation(db.Model):
+    __tablename__ = 'classes_people'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    user = db.relationship(User, backref=db.backref("classes_people", cascade="all, delete-orphan"))
+    product = db.relationship(Class, backref=db.backref("classes_people", cascade="all, delete-orphan"))
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)

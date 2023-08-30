@@ -130,6 +130,7 @@ def create_class():
     print(class_obj.people)
     return jsonify({ 'class_code': class_obj.class_code }), 201
 
+
 @app.route('/api/get-classes', methods=['POST'])
 @jwt_required()
 def get_classes():

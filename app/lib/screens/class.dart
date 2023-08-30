@@ -1,54 +1,26 @@
-import 'dart:convert';
-import 'package:app/screens/class.dart';
-import 'package:http/http.dart';
 import 'package:flutter/material.dart';
-import '../constants.dart';
 import '../main.dart';
 import '../models/user.dart';
 import '../widgets/modals/join_school.dart';
 
-class ClassesScreen extends StatefulWidget {
+class ClassScreen extends StatefulWidget {
   User user;
-  ClassesScreen(this.user, {Key? key}) : super(key: key);
+  String title;
+  ClassScreen(this.user, {Key? key, required this.title}) : super(key: key);
 
   @override
-  State<ClassesScreen> createState() => _ClassesScreenState(user);
+  State<ClassScreen> createState() => _ClassScreenState(user, title);
 }
 
-class _ClassesScreenState extends State<ClassesScreen> {
+class _ClassScreenState extends State<ClassScreen> {
   User user;
-  _ClassesScreenState(this.user);
-
-  Future<Widget> buildClassWidgets() async {
-    if (prefs.getString('school') == null) {
-      return const Text('No school data yet. Try joining a school.');
-    }
-
-    Response response = await post(Uri.parse('${apiBaseUrl}get-classes'), headers: {'Content-Type': 'application/json', 'Authorization': "Bearer ${prefs.get('token')}"});
-    if (response.statusCode != 200) {
-      return const Text('Failed to load class list.');
-    }
-
-    List<Widget> classes = [];
-    for (var classObj in jsonDecode(response.body)['classes']) {
-      classes.add(ListTile(
-        onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ClassScreen(user, title: classObj['class_code']))),
-        shape: Border(
-          left: BorderSide(color: Theme.of(context).primaryColor, width: 2.5),
-        ),
-        title: Text(classObj['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(classObj['class_code']),
-      ));
-    }
-
-    return ListView(children: classes);
-  }
+  String classCode;
+  _ClassScreenState(this.user, this.classCode);
 
   @override
   Widget build(BuildContext context) {
     currentUser = user;
     return Scaffold(
-        floatingActionButton: user.role == 'Educator' && prefs.getString('school') != null? FloatingActionButton(onPressed: () => Navigator.pushNamed(context, '/create-class'), child: const Icon(Icons.add)) : null,
         backgroundColor: Colors.white,
         drawer: Drawer(
           child: Padding(
@@ -98,7 +70,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
                         )),
                       ),
                       ListTile(
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => Navigator.pushReplacementNamed(context, '/classes'),
                         leading: const Icon(Icons.list, color: Colors.black54),
                         title: const Text('Classes', style: TextStyle(
                             color: Colors.black54,
@@ -140,7 +112,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
           ),
         ),
         appBar: AppBar(
-          title: const Text('Home', style: TextStyle(
+          title: Text(classCode, style: const TextStyle(
               fontWeight: FontWeight.bold
           )),
           actions: [
@@ -161,18 +133,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
             )
           ],
         ),
-        body: SizedBox.expand(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(22.0, 12.0, 22.0, 8.0),
-            child: FutureBuilder(future: buildClassWidgets(),
-                builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-                  if (snapshot.hasData) {
-                    return snapshot.data!;
-                  }
-                  return Container();
-                })
-          ),
-        )
+        body: Placeholder()
     );
   }
 }

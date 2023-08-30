@@ -110,7 +110,7 @@ def create_class():
         abort(403)
 
     title = request.json.get('title')
-    class_code = request.json.get('title')
+    class_code = request.json.get('class_code')
     students = request.json.get('students')
     people = [user]
     for s in students:
@@ -127,6 +127,7 @@ def create_class():
     db.session.add(class_obj)
     db.session.commit()
 
+    print(class_obj.people)
     return jsonify({ 'class_code': class_obj.class_code }), 201
 
 @app.route('/api/get-classes', methods=['POST'])

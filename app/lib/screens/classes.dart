@@ -23,7 +23,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
       return const Text('No school data yet. Try joining a school.');
     }
 
-    Response response = await post(Uri.parse('${apiBaseUrl}token'), headers: {'Content-Type': 'application/json', 'Authorization': "Bearer ${prefs.get('token')}"});
+    Response response = await post(Uri.parse('${apiBaseUrl}get-classes'), headers: {'Content-Type': 'application/json', 'Authorization': "Bearer ${prefs.get('token')}"});
     if (response.statusCode != 200) {
       return const Text('Failed to load class list.');
     }
@@ -31,8 +31,9 @@ class _ClassesScreenState extends State<ClassesScreen> {
     List<Widget> classes = [];
     for (var classObj in jsonDecode(response.body)['classes']) {
       classes.add(ListTile(
-        shape: const Border(
-          left: BorderSide(color: Colors.green, width: 2),
+        onTap: () {},
+        shape: Border(
+          left: BorderSide(color: Theme.of(context).primaryColor, width: 2.5),
         ),
         title: Text(classObj['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(classObj['class_code']),

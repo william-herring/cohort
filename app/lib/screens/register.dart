@@ -80,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8.0)
                 ),
-                height: 450,
+                height: 600,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -27,7 +27,7 @@ class _CreateClassScreenState extends State<CreateClassScreen> {
     _formKey.currentState?.validate();
     Response response = await post(Uri.parse('${apiBaseUrl}create-class'), headers: {'Content-Type': 'application/json', 'Authorization': "Bearer ${prefs.get('token')}"}, body: jsonEncode({
       'title': title,
-      'classCode': classCode,
+      'class_code': classCode,
       'students': students,
     }));
 

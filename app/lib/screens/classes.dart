@@ -32,7 +32,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
     List<Widget> classes = [];
     for (var classObj in jsonDecode(response.body)['classes']) {
       classes.add(ListTile(
-        onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ClassScreen(user, title: classObj['class_code']))),
+        onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ClassScreen(user, classCode: classObj['class_code']))),
         shape: Border(
           left: BorderSide(color: Theme.of(context).primaryColor, width: 2.5),
         ),

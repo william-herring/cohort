@@ -18,6 +18,7 @@ class _CreateClassScreenState extends State<CreateClassScreen> {
   User user;
   String title = '';
   String classCode = '';
+  String classroom = '';
   List<String> students = [];
   final _formKey = GlobalKey<FormState>();
 
@@ -28,10 +29,10 @@ class _CreateClassScreenState extends State<CreateClassScreen> {
     Response response = await post(Uri.parse('${apiBaseUrl}create-class'), headers: {'Content-Type': 'application/json', 'Authorization': "Bearer ${prefs.get('token')}"}, body: jsonEncode({
       'title': title,
       'class_code': classCode,
+      'classroom': classroom,
       'students': students,
     }));
 
-    print(response.body);
     if (response.statusCode == 201) {
       Navigator.pop(context);
     }
@@ -117,6 +118,32 @@ class _CreateClassScreenState extends State<CreateClassScreen> {
                     }
                     setState(() {
                       classCode = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Classroom',
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromRGBO(123, 88, 198, 1))
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromRGBO(123, 88, 198, 1))
+                    ),
+                    labelStyle: TextStyle(
+                      color: Color.fromRGBO(123, 88, 198, 1),
+                    ),
+                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Field must not be empty';
+                    }
+                    if (value.length > 20) {
+                      return 'Classroom cannot be longer than 20 characters';
+                    }
+                    setState(() {
+                      classroom = value;
                     });
                   },
                 ),

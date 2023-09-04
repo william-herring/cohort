@@ -32,6 +32,7 @@ class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     people = db.relationship('User', backref='school')
+    schedule_schema = db.relationship("ScheduleSchema", uselist=False, backref="school")
     invite_code = db.Column(db.String(6), unique=True)
 
     def generate_invite_code(self):
@@ -40,11 +41,24 @@ class School(db.Model):
             code = ''.join(random.choices(string.ascii_uppercase, k=6))
         self.invite_code = code
 
+class ScheduleSchema(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
+    week_cycle = db.Column(db.Integer, nullable=False)
+    period1 = db.Column(db.DateTime, nullable=False)
+    period2 = db.Column(db.DateTime, nullable=False)
+    period3 = db.Column(db.DateTime, nullable=False)
+    period4 = db.Column(db.DateTime, nullable=False)
+    period5 = db.Column(db.DateTime, nullable=False)
+
+
 class Class(db.Model):
     __tablename__ = 'class'
     id = db.Column(db.Integer, primary_key=True)
     class_code = db.Column(db.String(10), nullable=False)
     name = db.Column(db.String(100), nullable=False)
+    classroom = db.Column(db.String(20), default='Unassigned')
+    schedule_code = db.Column(db.String(50), default='NOSCHEDULE')
     posts = db.relationship('Post', backref='class')
     people = db.relationship('User', secondary='classes_people')
 

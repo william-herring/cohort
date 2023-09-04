@@ -1,21 +1,35 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import '../constants.dart';
 import '../main.dart';
+import '../models/class.dart';
 import '../models/user.dart';
+import 'package:http/http.dart';
 import '../widgets/modals/join_school.dart';
 
 class ClassScreen extends StatefulWidget {
   User user;
-  String title;
-  ClassScreen(this.user, {Key? key, required this.title}) : super(key: key);
+  String classCode;
+  ClassScreen(this.user, {Key? key, required this.classCode}) : super(key: key);
 
   @override
-  State<ClassScreen> createState() => _ClassScreenState(user, title);
+  State<ClassScreen> createState() => _ClassScreenState(user, classCode);
 }
 
 class _ClassScreenState extends State<ClassScreen> {
   User user;
   String classCode;
   _ClassScreenState(this.user, this.classCode);
+
+  Future<Class?> classObj() async {
+    Response response = await post(Uri.parse('${apiBaseUrl}get-class'), headers: {'Content-Type': 'application/json', 'Authorization': "Bearer ${prefs.get('token')}"}, body: jsonEncode({'class_code': classCode}));
+    if (response.statusCode != 200) {
+      return null;
+    }
+
+    return Class.fromJson(jsonDecode(response.body));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +147,44 @@ class _ClassScreenState extends State<ClassScreen> {
             )
           ],
         ),
-        body: Placeholder()
+        body: FutureBuilder(future: classObj(),
+            builder: (BuildContext context, AsyncSnapshot<Class?> snapshot) {
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(22.0, 12.0, 22.0, 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(snapshot.data!.name, style: const TextStyle(
+                          fontSize: 24.0,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold
+                      )),
+                      Text(classCode, style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.black54,
+                      )),
+                      Text(snapshot.data!.classroom, style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.black54,
+                      )),
+                      const SizedBox(height: 16.0),
+                      Row(
+                        children: [
+                          CircleAvatar(radius: 20.00, backgroundImage: NetworkImage(snapshot.data!.teachers[0]['avatar'])),
+                          const SizedBox(width: 8.0),
+                          Text(snapshot.data!.teachers[0]['name'], style: const TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.black54,
+                          )),
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              }
+              return const Text('Loading class...');
+            })
     );
   }
 }

@@ -110,17 +110,64 @@ def create_class():
         abort(403)
 
     title = request.json.get('title')
-    class_code = request.json.get('title')
+    class_code = request.json.get('class_code')
+    classroom = request.json.get('classroom')
+    students = request.json.get('students')
     people = [user]
+    for s in students:
+        try:
+            people.append(User.query.filter_by(user_id=s).first())
+        except:
+            return 404
+
     class_obj = Class(
         name=title,
         class_code=class_code,
+        classroom=classroom,
         people=people
     )
     db.session.add(class_obj)
     db.session.commit()
 
+    print(class_obj.people)
     return jsonify({ 'class_code': class_obj.class_code }), 201
+
+
+@app.route('/api/get-classes', methods=['POST'])
+@jwt_required()
+def get_classes():
+    user = User.query.get(get_jwt_identity())
+    classes_list = []
+    for c in user.classes:
+        classes_list.append({
+            'id': c.id,
+            'class_code': c.class_code,
+            'name': c.name
+        })
+
+    return jsonify({ 'classes': classes_list }), 200
+
+@app.route('/api/get-class', methods=['POST'])
+@jwt_required()
+def get_class():
+    print('hit')
+    user = User.query.get(get_jwt_identity())
+    for c in user.classes:
+        if c.class_code == request.json.get('class_code'):
+            students = []
+            teachers = []
+            for p in c.people:
+                if user.role == 'Educator':
+                    students.append({ 'user_id': p.user_id, 'name': p.name, 'email': p.email, 'avatar': p.avatar }) if p.role == 'Student' else teachers.append({ 'user_id': p.user_id, 'name': p.name, 'email': p.email, 'avatar': p.avatar })
+                else:
+                    students.append({ 'user_id': p.user_id, 'name': p.name }) if p.role == 'Student' else teachers.append({ 'user_id': p.user_id, 'name': p.name, 'email': p.email, 'avatar': p.avatar })
+
+            return jsonify({ 'class_code': c.class_code, 'name': c.name, 'classroom': c.classroom, 'people': {
+                'students': students,
+                'teachers': teachers
+            } }), 200
+
+    return 404
 
 @app.route('/api/create-post', methods=['POST'])
 @jwt_required()

@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: ElevatedButton(onPressed: handleSubmit,
+            child: ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/register'),
               style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white)),
               child: const Text("Sign up", style: TextStyle(color: Color.fromRGBO(123, 88, 198, 1), fontWeight: FontWeight.w700)),
             ),

@@ -14,6 +14,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
   User user;
   _ProfileScreenState(this.user);
 
+  Widget attendenceRow(){
+    var attendance = [
+      {
+        'class_id': 'FORTNITE',
+        'attendance_status': 'present'
+      },
+      {
+        'class_id': 'SHITTINGCLASS',
+        'attendance_status': 'late'
+      },
+      {
+        'class_id': 'RICHARDSHELLY',
+        'attendance_status': 'absent'
+      },
+      {
+        'class_id': 'LITTLEPEOPLESPEAKINGANDLISTENING',
+        'attendance_status': 'not_marked'
+      },
+      {
+        'class_id': 'FARTNITE',
+        'attendance_status': 'absent'
+      },
+    ];
+    List<Widget> attendanceWidgets = [];
+    for (var a in attendance){
+      print(a);
+      if(a['attendance_status'] == 'present'){
+        attendanceWidgets.add(Container(decoration:BoxDecoration(borderRadius: BorderRadius.circular(5.0) ,color: Colors.green) ,width: 25,height: 25));
+        attendanceWidgets.add(SizedBox(width: 5.0,));
+      }
+      if(a['attendance_status'] == 'late'){
+        attendanceWidgets.add(Container(decoration:BoxDecoration(borderRadius: BorderRadius.circular(5.0) ,color: Colors.yellow) ,width: 25,height: 25));
+        attendanceWidgets.add(SizedBox(width: 5.0,));
+      }
+      if(a['attendance_status'] == 'absent'){
+        attendanceWidgets.add(Container(decoration:BoxDecoration(borderRadius: BorderRadius.circular(5.0) ,color: Colors.red) ,width: 25,height: 25));
+        attendanceWidgets.add(SizedBox(width: 5.0,));
+      }
+      if(a['attendance_status'] == 'not_marked'){
+        attendanceWidgets.add(Container(decoration:BoxDecoration(borderRadius: BorderRadius.circular(5.0) ,color: Colors.grey) ,width: 25,height: 25));
+        attendanceWidgets.add(SizedBox(width: 5.0,));
+      }
+    }
+    return Row(children: attendanceWidgets,);
+  }
+
   @override
   Widget build(BuildContext context) {
     currentUser = user;
@@ -116,7 +162,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(user.name) // Replace with screen elements
+                Row(children:[
+                    CircleAvatar(
+                      radius: 70.00,
+                      backgroundImage: NetworkImage(user.avatar.toString()),
+                    ),  
+                    const SizedBox(width: 40.0,),
+                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(user.name, style: TextStyle(fontSize: 40),),
+                      Text('Year 10 - Moorabin High Acedemia', style: TextStyle(fontSize: 20),), 
+                      SizedBox(height: 5,),
+                      Text(user.email, style: TextStyle(fontSize: 13),),
+                      SizedBox(height: 5,),
+                      Text('11/9/2001', style: TextStyle(fontSize: 13),),
+                    ],)
+                  ]
+                ),
+                SizedBox(height: 30,),
+                
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(decoration: BoxDecoration(
+                    border: Border(left: BorderSide(width: 4,color: Color.fromRGBO(181, 116, 211, 1)))),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start ,children: [Text('Attendence'),attendenceRow()],), 
+                    padding: EdgeInsets.only(left: 5.0),                  
+                    ),
+                ),
+
+                SizedBox(height: 20.0,),
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(decoration: BoxDecoration(
+                    border: Border(left: BorderSide(width: 4,color: Color.fromRGBO(181, 116, 211, 1)))),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('My Details')],),
+                    padding: EdgeInsets.only(left: 5.0),
+                  )
+                )
               ],
             ),
           ),
@@ -124,3 +206,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+

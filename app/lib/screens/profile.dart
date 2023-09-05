@@ -170,7 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(width: 40.0,),
                     Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text(user.name, style: TextStyle(fontSize: 40),),
-                      Text('Year 10 - Moorabin High Acedemia', style: TextStyle(fontSize: 20),), 
+                      Text('Year 10 - Moorabin High Acedemia', style: TextStyle(fontSize: 13),),
                       SizedBox(height: 5,),
                       Text(user.email, style: TextStyle(fontSize: 13),),
                       SizedBox(height: 5,),

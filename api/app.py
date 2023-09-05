@@ -150,7 +150,6 @@ def get_classes():
 @app.route('/api/get-class', methods=['POST'])
 @jwt_required()
 def get_class():
-    print('hit')
     user = User.query.get(get_jwt_identity())
     for c in user.classes:
         if c.class_code == request.json.get('class_code'):
@@ -204,3 +203,63 @@ def create_post():
     db.session.commit()
 
     return 201
+
+@app.route('/api/create-schedule', methods=['POST'])
+@jwt_required()
+def create_schedule():
+    user = User.query.get(get_jwt_identity())
+    if user.role != 'Educator':
+        abort(403)
+
+    school = user.school_id
+
+    schema_csv = request.json.get('schema').splitlines()
+    schedules_csv = request.json.get('schedules')
+
+    schema_data = []
+    for row in schema_csv:
+        schema_data.append(row.split(','))
+
+    schema = ScheduleSchema(
+        school_id=school,
+        week_cycle=int(schema_csv[1][1]),
+        period1=datetime.time(hour=int(schema_csv[2][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
+        period2 = datetime.time(hour=int(schema_csv[3][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
+        period3=datetime.time(hour=int(schema_csv[4][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
+        period4=datetime.time(hour=int(schema_csv[5][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
+        period5=datetime.time(hour=int(schema_csv[6][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
+    )
+
+    # Generates schedule codes for each class.
+    # Schedule codes look like this: 4-1-2|3-5-N-END-N-2|3-4-1-1-END
+    schedules_data = {}
+    for table in schedules_csv:
+        for i, row in enumerate(table):
+            if i > 0:
+                data = row.split(',')
+                if data[0] in schedules_data.keys():
+                    code = '-'
+                    for d in range(7):
+                        if schedules_data[data[d]] == 'None':
+                            code += 'N-'
+                        else:
+                            code += schedules_data[data[d]].strip().replace(',', '|') + '-'
+                    schedules_data[data[0]] = schedules_data[data[0]] + code + '-END'
+                else:
+                    code = ''
+                    for d in range(7):
+                        if schedules_data[data[d]] == 'None':
+                            code += 'N-'
+                        else:
+                            code += schedules_data[data[d]].strip().replace(',', '|') + '-'
+                    schedules_data[data[0]] = code + '-END'
+
+    db.session.add(schema)
+
+    for c in schedules_data.keys():
+        class_obj = Class.query.filter_by(class_code=c)
+        class_obj.schedule_code = schedules_data[c]
+        db.session.add(c)
+
+    db.session.commit()
+    return 200

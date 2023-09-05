@@ -45,11 +45,11 @@ class ScheduleSchema(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     week_cycle = db.Column(db.Integer, nullable=False)
-    period1 = db.Column(db.DateTime, nullable=False)
-    period2 = db.Column(db.DateTime, nullable=False)
-    period3 = db.Column(db.DateTime, nullable=False)
-    period4 = db.Column(db.DateTime, nullable=False)
-    period5 = db.Column(db.DateTime, nullable=False)
+    period1 = db.Column(db.Time, nullable=False)
+    period2 = db.Column(db.Time, nullable=False)
+    period3 = db.Column(db.Time, nullable=False)
+    period4 = db.Column(db.Time, nullable=False)
+    period5 = db.Column(db.Time, nullable=False)
 
 
 class Class(db.Model):

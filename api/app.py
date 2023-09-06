@@ -2,6 +2,7 @@ from flask import Flask, request, abort, jsonify
 import os
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
@@ -118,7 +119,7 @@ def create_class():
         try:
             people.append(User.query.filter_by(user_id=s).first())
         except:
-            return 404
+            abort(404)
 
     class_obj = Class(
         name=title,
@@ -166,7 +167,7 @@ def get_class():
                 'teachers': teachers
             } }), 200
 
-    return 404
+    return abort(404)
 
 @app.route('/api/create-post', methods=['POST'])
 @jwt_required()
@@ -202,7 +203,7 @@ def create_post():
     db.session.add(class_obj)
     db.session.commit()
 
-    return 201
+    return jsonify({ 'CREATED': 'Post created' }), 201
 
 @app.route('/api/create-schedule', methods=['POST'])
 @jwt_required()
@@ -216,18 +217,23 @@ def create_schedule():
     schema_csv = request.json.get('schema').splitlines()
     schedules_csv = request.json.get('schedules')
 
+    print(schema_csv[0].split(',')[1])
+    print(schedules_csv[0])
+
     schema_data = []
     for row in schema_csv:
         schema_data.append(row.split(','))
 
+    print(datetime.time(hour=int(schema_csv[1].split(',')[1].split(':')[0]), minute=int(schema_csv[1].split(',')[1].split(':')[1])).strftime('1900-01-01 %H:%M:%S.%f'))
+
     schema = ScheduleSchema(
         school_id=school,
-        week_cycle=int(schema_csv[1][1]),
-        period1=datetime.time(hour=int(schema_csv[2][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
-        period2 = datetime.time(hour=int(schema_csv[3][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
-        period3=datetime.time(hour=int(schema_csv[4][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
-        period4=datetime.time(hour=int(schema_csv[5][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
-        period5=datetime.time(hour=int(schema_csv[6][1].split(':')[0]), minute=int(schema_csv[2][1].split(':')[1])),
+        week_cycle=int(schema_csv[0].split(',')[1]),
+        period1=datetime.time(hour=int(schema_csv[1].split(',')[1].split(':')[0]), minute=int(schema_csv[1].split(',')[1].split(':')[1])).strftime('1900-01-01 %H:%M:%S.%f'),
+        period2=datetime.time(hour=int(schema_csv[2].split(',')[1].split(':')[0]), minute=int(schema_csv[2].split(',')[1].split(':')[1])).strftime('1900-01-01 %H:%M:%S.%f'),
+        period3=datetime.time(hour=int(schema_csv[3].split(',')[1].split(':')[0]), minute=int(schema_csv[3].split(',')[1].split(':')[1])).strftime('1900-01-01 %H:%M:%S.%f'),
+        period4=datetime.time(hour=int(schema_csv[4].split(',')[1].split(':')[0]), minute=int(schema_csv[4].split(',')[1].split(':')[1])).strftime('1900-01-01 %H:%M:%S.%f'),
+        period5=datetime.time(hour=int(schema_csv[5].split(',')[1].split(':')[0]), minute=int(schema_csv[5].split(',')[1].split(':')[1])).strftime('1900-01-01 %H:%M:%S.%f'),
     )
 
     # Generates schedule codes for each class.
@@ -260,6 +266,8 @@ def create_schedule():
         class_obj = Class.query.filter_by(class_code=c)
         class_obj.schedule_code = schedules_data[c]
         db.session.add(c)
+        db.session.commit()
 
     db.session.commit()
-    return 200
+
+    return jsonify({ 'OK': 'Schedule generated' }), 200

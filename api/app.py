@@ -217,14 +217,9 @@ def create_schedule():
     schema_csv = request.json.get('schema').splitlines()
     schedules_csv = request.json.get('schedules')
 
-    print(schema_csv[0].split(',')[1])
-    print(schedules_csv[0])
-
     schema_data = []
     for row in schema_csv:
         schema_data.append(row.split(','))
-
-    print(datetime.time(hour=int(schema_csv[1].split(',')[1].split(':')[0]), minute=int(schema_csv[1].split(',')[1].split(':')[1])).strftime('1900-01-01 %H:%M:%S.%f'))
 
     schema = ScheduleSchema(
         school_id=school,
@@ -236,36 +231,39 @@ def create_schedule():
         period5=datetime.time(hour=int(schema_csv[5].split(',')[1].split(':')[0]), minute=int(schema_csv[5].split(',')[1].split(':')[1])).strftime('1900-01-01 %H:%M:%S.%f'),
     )
 
+    print(schedules_csv[0])
     # Generates schedule codes for each class.
     # Schedule codes look like this: 4-1-2|3-5-N-END-N-2|3-4-1-1-END
     schedules_data = {}
     for table in schedules_csv:
-        for i, row in enumerate(table):
+        for i, row in enumerate(table.splitlines()):
             if i > 0:
                 data = row.split(',')
+                print(row)
                 if data[0] in schedules_data.keys():
                     code = '-'
-                    for d in range(7):
-                        if schedules_data[data[d]] == 'None':
+                    for d in range(6):
+                        if data[d] == 'None':
                             code += 'N-'
                         else:
-                            code += schedules_data[data[d]].strip().replace(',', '|') + '-'
-                    schedules_data[data[0]] = schedules_data[data[0]] + code + '-END'
+                            code += data[d].strip().replace(',', '|') + '-'
+                    schedules_data[data[0]] = schedules_data[data[0]] + code + 'END'
                 else:
                     code = ''
-                    for d in range(7):
-                        if schedules_data[data[d]] == 'None':
+                    for d in range(6):
+                        if data[d] == 'None':
                             code += 'N-'
                         else:
-                            code += schedules_data[data[d]].strip().replace(',', '|') + '-'
-                    schedules_data[data[0]] = code + '-END'
+                            code += data[d].strip().replace(',', '|') + '-'
+                    schedules_data[data[0]] = code + 'END'
 
     db.session.add(schema)
+    print(schedules_data)
 
     for c in schedules_data.keys():
-        class_obj = Class.query.filter_by(class_code=c)
+        class_obj = Class.query.filter_by(class_code=c).first()
         class_obj.schedule_code = schedules_data[c]
-        db.session.add(c)
+        db.session.add(class_obj)
         db.session.commit()
 
     db.session.commit()

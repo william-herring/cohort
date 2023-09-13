@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import '../constants.dart';
 import '../main.dart';
 import '../models/user.dart';
 import '../widgets/modals/join_school.dart';
+import 'package:http/http.dart';
 
 class ScheduleScreen extends StatefulWidget {
   User user;
@@ -24,6 +28,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         date = picked;
       });
     }
+  }
+
+  Future<List<Step>?> buildSchedule() async {
+    Response response = await post(Uri.parse('${apiBaseUrl}get-schedule'), headers: {'Content-Type': 'application/json', 'Authorization': "Bearer ${prefs.get('token')}"});
+    print(response.body);
+
+
   }
 
   @override

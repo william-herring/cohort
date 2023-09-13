@@ -268,4 +268,35 @@ def create_schedule():
 
     db.session.commit()
 
-    return jsonify({ 'OK': 'Schedule generated' }), 200
+    return jsonify({ 'OK': 'Schedule generated' }), 201
+
+@app.route('/api/get-schedule', methods=['GET'])
+@jwt_required()
+def get_schedule():
+    user = User.query.get(get_jwt_identity())
+    schema = ScheduleSchema.query.filter_by(school_id=user.school_id).first()
+
+    period_time_mapping = {
+        1: datetime.datetime.timestamp(schema.period1),
+        2: datetime.datetime.timestamp(schema.period2),
+        3: datetime.datetime.timestamp(schema.period3),
+        4: datetime.datetime.timestamp(schema.period4),
+        5: datetime.datetime.timestamp(schema.period5),
+    }
+    get_period_time = lambda p : period_time_mapping[int(p)] if '|' not in p else [period_time_mapping[int(p.split('|')[0])], period_time_mapping[int(p.split('|')[1])]],
+
+    data = {}
+
+    for c in User.classes:
+        weeks = c.schedule_code.split('END')
+        for i in range(schema.week_cycle):
+            week = weeks[i].split('-')
+            data[f'week{i+1}'] = {
+                'Monday': get_period_time(week[1]),
+                'Tuesday':  get_period_time(week[2]),
+                'Wednesday': get_period_time(week[3]),
+                'Thursday': get_period_time(week[4]),
+                'Friday': get_period_time(week[5])
+            }
+
+    return jsonify(data), 200
